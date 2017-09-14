@@ -14,7 +14,7 @@ describe('new Board', () => {
   })
 })
 
-describe('Board::indexFor(coords: [row, col])', () => {  
+describe('Board::indexFor(coords: [row, col])', () => {
   it('returns 0 for (0, 0)', () => {
     expect(new Board().indexFor([0, 0])).toEqual(0)
   })
@@ -48,8 +48,8 @@ describe('Board::get(coords)', () => {
       1, 1, 1
     ]))
 
-  it('returns the value of cells that are there', () => {    
-    expect(board.get([0, 1])).toEqual(1)    
+  it('returns the value of cells that are there', () => {
+    expect(board.get([0, 1])).toEqual(1)
   })
 
   it('returns 0 for cells that are off the board', () => {
@@ -167,7 +167,7 @@ describe('conway(isAlive, livingNeighbors) -> Boolean', () => {
       expect(conway(false, 2)).toEqual(false)
       expect(conway(false, 4)).toEqual(false)
       expect(conway(false, 5)).toEqual(false)
-      expect(conway(false, 6)).toEqual(false)      
+      expect(conway(false, 6)).toEqual(false)
       expect(conway(false, 7)).toEqual(false)
       expect(conway(false, 8)).toEqual(false)
     })
@@ -193,7 +193,7 @@ describe('tick(present: Board, future: Board!, rules)', () => {
 
   describe('with rules that toggle cells', () => {
     function flip(alive) { return !alive }
-    
+
     it('flips living cells to dead', () => {
       var present = new Board(2, 2, [1, 1, 0, 0])
       var future = new Board(2, 2)
@@ -202,7 +202,7 @@ describe('tick(present: Board, future: Board!, rules)', () => {
     })
   })
 
-  describe("with conway's rules", () => {  
+  describe("with conway's rules", () => {
     it('does nothing to a block', () => {
       var block = new Board(2, 2, [
         1, 1,
