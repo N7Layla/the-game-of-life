@@ -138,6 +138,7 @@ function tick(present, future, rules=conway) {
     numLivingNeighbors = present.livingNeighbors(coords);
     isAliveFuture = rules(isAlive, numLivingNeighbors);
     if(isAliveFuture) future.cells[i] = 1;
+    else future.cells[i] = 0;
   }
   return [future, present]
 }

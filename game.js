@@ -8,7 +8,7 @@ if (mainElement) {
 
   // TODO: Connect other buttons.
   document.getElementById('play_btn')
-    .addEventListener('click', game.play)
+    .addEventListener('click', game.togglePlaying)
   document.getElementById('reset_btn')
     .addEventListener('click', game.random)
   document.getElementById('clear_btn')
@@ -25,7 +25,9 @@ function Life(container, width=12, height=12) {
 
   // Create a <table> to hold our cells.
   var table = createTable();
-  
+  var interval;
+  var playing = false;
+
   // Put the table in our container
   container.appendChild(table);
 
@@ -44,19 +46,20 @@ function Life(container, width=12, height=12) {
         // We'll put the coordinate on the cell
         // Element itself, letting us fetch it
         // in a click listener later.
-        td.coord = [r, c];        
+        td.coord = [r, c];
         tr.appendChild(td);                            //     </td>
       }
       table.appendChild(tr);                           //   </tr>
     }                                                  //  </table>
-    return table    
+    return table
   }
-  
+
   function toggleCellFromEvent(event) {
     // FIXME: This currently always toggles cell (0, 0).
     // How do we get the coordinate of the cell that was clicked on?
     // HINT: https://developer.mozilla.org/en-US/docs/Web/API/Event/target
-    var cell = document.getElementById('event.target'); // ⬅️ Fix me
+    var id = event.target.id;
+    var cell = document.getElementById(id); // ⬅️ Fix me
     present.toggle(cell.coord)
     paint()
   }
@@ -75,7 +78,7 @@ function Life(container, width=12, height=12) {
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
 
     var tableCells = document.getElementsByTagName("td");
-    for (var i = 0; i < tableCells; i++) {
+    for (var i = 0; i < tableCells.length; i++) {
       var coords = tableCells[i].coord;
       var index = present.indexFor(coords);
       if (present.cells[index] === 1) {
@@ -120,11 +123,14 @@ function Life(container, width=12, height=12) {
     paint();
   }
 
+
+
   function play() {
     // TODO:
-    // Start playing by running the `step` function    
+    // Start playing by running the `step` function
     // automatically repeatedly every fixed time interval
-    
+    interval = setInterval(step, 1000); //change timing later
+    playing = true;
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
   }
@@ -132,19 +138,40 @@ function Life(container, width=12, height=12) {
   function stop() {
     // TODO: Stop autoplay.
     // HINT:
-    // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
+    //
+    clearInterval(interval);
+    playing = false;
+    //https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
   }
 
   function togglePlaying() {
     // TODO: If we're playing, stop. Otherwise, start playing.
+    if(playing) stop();
+    else play();
+  }
+
+  function turnEverythingOff() {
+    return false;
   }
 
   function clear() {
     // TODO: Clear the board
+    console.log('clear');
+    [present, future] = tick(present, future, turnEverythingOff);
+    console.log(present.cells);
+    console.log(future.cells);
+    paint();
+  }
+
+  function randomize() {
+    var num = Math.round(Math.random());
+    if(num === 0) return false;
+    else return true;
   }
 
   function random() {
-    // TODO: Randomize the board
+    [present, future] = tick(present, future, randomize);
+    paint();
   }
 
   return {play, step, stop, togglePlaying, random, clear}
