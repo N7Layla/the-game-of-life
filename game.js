@@ -7,6 +7,12 @@ if (mainElement) {
     .addEventListener('click', game.step)
 
   // TODO: Connect other buttons.
+  document.getElementById('play_btn')
+    .addEventListener('click', game.play)
+  document.getElementById('reset_btn')
+    .addEventListener('click', game.random)
+  document.getElementById('clear_btn')
+    .addEventListener('click', game.clear)
 }
 
 function Life(container, width=12, height=12) {
@@ -50,7 +56,7 @@ function Life(container, width=12, height=12) {
     // FIXME: This currently always toggles cell (0, 0).
     // How do we get the coordinate of the cell that was clicked on?
     // HINT: https://developer.mozilla.org/en-US/docs/Web/API/Event/target
-    var cell = document.getElementById('0-0'); // ⬅️ Fix me
+    var cell = document.getElementById('event.target'); // ⬅️ Fix me
     present.toggle(cell.coord)
     paint()
   }
@@ -67,6 +73,17 @@ function Life(container, width=12, height=12) {
     // HINT:
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+
+    var tableCells = document.getElementsByTagName("td");
+    for (var i = 0; i < tableCells; i++) {
+      var coords = tableCells[i].coord;
+      var index = present.indexFor(coords);
+      if (present.cells[index] === 1) {
+        tableCells[i].classList.add("alive");
+      } else {
+        tableCells[i].classList.remove("alive");
+      }
+    }
   }
 
   function step() {
